@@ -1,0 +1,13 @@
+name = "MilDistances"
+uuid = "c1c8aca4-0428-4357-9ed0-07b29dc6f34b"
+authors = ["Marek Dědič <developer@dedic.eu>"]
+version = "0.1.0"
+
+[deps]
+Clustering = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
+Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
+MLDataPattern = "9920b226-0b2a-5f5f-9153-9aa70a013f8b"
+Mill = "1d0525e4-8992-11e8-313c-e310e1f6ddea"
+
+[compat]
+julia = "^1.2.0"

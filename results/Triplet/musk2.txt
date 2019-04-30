@@ -1,0 +1,10 @@
+Base model:
+Mean distance to the center of a cluster (lower is better): 781.07874
+Mean distance between cluster centers (higher is better): 515.02435
+Accuracy for kNN (higher is better): 0.7222222
+F1 score for kNN (higher is better): 0.7368421
+Evaluated model:
+Mean distance to the center of a cluster (lower is better): 23.038881
+Mean distance between cluster centers (higher is better): 83.275314
+Accuracy for kNN (higher is better): 0.8888889
+F1 score for kNN (higher is better): 0.875
