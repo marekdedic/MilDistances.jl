@@ -1,9 +1,9 @@
-function triplet(model::T; c::Float32 = 1.0f0, innerLoss::Function = hinge, dist::Function = l2squared) where {T<:MillModel}
+function triplet(model::T; c::Float32 = 1.0f0, innerLoss::Function = hinge, dist::PreMetric = SqEuclidean()) where {T<:MillModel}
 	return function(data::DataSubset)
 		y = getobs(data).metadata;
 		yMat = y .== y';
 		η = yMat; # TODO: Add target neighbour selection
-		D = distanceMatrix(model(getobs(data)).data, dist);
+		D = pairwise(dist, model(getobs(data)).data, dims = 2);
 		clusterTerm = sum(
 			i->sum(
 				j->η[i, j] * D[i, j],

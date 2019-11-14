@@ -1,9 +1,10 @@
 using Clustering;
+using Distances;
 using LinearAlgebra;
 
 export magnet;
 
-function magnet(model::T, classes::Vector; K::Int = 6, α::Float32 = 0.0f0, clusterIndexUpdateFrequency::Int = 25, dist::Function = l2squared, innerLoss::Function = hinge) where {T<:MillModel}
+function magnet(model::T, classes::Vector; K::Int = 6, α::Float32 = 0.0f0, clusterIndexUpdateFrequency::Int = 25, dist::PreMetric = SqEuclidean(), innerLoss::Function = hinge) where {T<:MillModel}
 	counter = 0; # So that it updates on the first run
 	classes = unique(classes);
 	clusterCenters = Vector{Vector{Vector{Float32}}}(undef, length(classes));
@@ -18,7 +19,7 @@ function magnet(model::T, classes::Vector; K::Int = 6, α::Float32 = 0.0f0, clus
 
 	function μ(r::A)::Vector{Float32} where {A<:AbstractVector}
 		centers = vcat(clusterCenters...);
-		distances = map(center -> dist(r, center), centers)
+		distances = map(center -> evaluate(dist, r, center), centers)
 		return centers[distances .== minimum(distances)][1];
 	end
 
@@ -32,9 +33,9 @@ function magnet(model::T, classes::Vector; K::Int = 6, α::Float32 = 0.0f0, clus
 		end
 
 		r(i) = outputs[:, i];
-		N = map(i -> dist(r(i), μ(r(i))), 1:instanceCount)
+		N = map(i -> evaluate(dist, r(i), μ(r(i))), 1:instanceCount)
 		σ² = reduce(+, N) / (instanceCount - 1)
-		M = [mapreduce(k -> exp(-dist(r(i), classCenters[k]) / (2 * σ²)), +, 1:K) for i in 1:instanceCount, classCenters in clusterCenters]
+		M = [mapreduce(k -> exp(-evaluate(dist, r(i), classCenters[k]) / (2 * σ²)), +, 1:K) for i in 1:instanceCount, classCenters in clusterCenters]
 
 		numerator(i) = exp((-N[i] / (2 * σ²)) - α);
 		denominator(i) = mapreduce(c -> y[i] == c ? 0 : M[i, c], +, 1:length(classes));
