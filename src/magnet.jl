@@ -1,10 +1,11 @@
 using Clustering;
 using Distances;
 using LinearAlgebra;
+using LossFunctions;
 
 export magnet;
 
-function magnet(model::T, classes::Vector; K::Int = 6, α::Float32 = 0.0f0, clusterIndexUpdateFrequency::Int = 25, dist::PreMetric = SqEuclidean(), innerLoss::Function = hinge) where {T<:MillModel}
+function magnet(model::T, classes::Vector; K::Int = 6, α::Float32 = 0.0f0, clusterIndexUpdateFrequency::Int = 25, dist::PreMetric = SqEuclidean(), innerLoss::SupervisedLoss = L1HingeLoss()) where {T<:MillModel}
 	counter = 0; # So that it updates on the first run
 	classes = unique(classes);
 	clusterCenters = Vector{Vector{Vector{Float32}}}(undef, length(classes));
@@ -40,7 +41,7 @@ function magnet(model::T, classes::Vector; K::Int = 6, α::Float32 = 0.0f0, clus
 		numerator(i) = exp((-N[i] / (2 * σ²)) - α);
 		denominator(i) = mapreduce(c -> y[i] == c ? 0 : M[i, c], +, 1:length(classes));
 
-		summant(i) = innerLoss(log(denominator(i)) - log(numerator(i)));
+		summant(i) = value(innerLoss, log(denominator(i)) - log(numerator(i)));
 		sum = mapreduce(i -> summant(i), +, 1:instanceCount);
 
 		counter -= 1;

@@ -1,4 +1,4 @@
-function triplet(model::T; c::Float32 = 1.0f0, innerLoss::Function = hinge, dist::PreMetric = SqEuclidean()) where {T<:MillModel}
+function triplet(model::T; c::Float32 = 1.0f0, innerLoss::SupervisedLoss = L1HingeLoss(), dist::PreMetric = SqEuclidean()) where {T<:MillModel}
 	return function(data::DataSubset)
 		y = getobs(data).metadata;
 		yMat = y .== y';
@@ -12,7 +12,7 @@ function triplet(model::T; c::Float32 = 1.0f0, innerLoss::Function = hinge, dist
 		nonClusterTerm = sum(
 			i->sum(
 				j->sum(
-					l-> η[i, j] * (1 - yMat[i, l]) * innerLoss(D[i, l] - D[i, j]),
+					l-> η[i, j] * (1 - yMat[i, l]) * value(innerLoss, D[i, l] - D[i, j]),
 					1:length(y)),
 				1:length(y)),
 			1:length(y));
