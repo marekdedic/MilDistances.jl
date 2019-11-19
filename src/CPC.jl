@@ -12,7 +12,12 @@ function CPC(model::T, dist::PreMetric = SqEuclidean()) where {T<:MillModel}
 
 	return function(data::DataSubset)
 		first, second = splitBags(shuffleInBags(getobs(data)));
-		D = pairwise(dist, model(first).data, model(second).data, dims = 2);
+		# https://github.com/FluxML/Tracker.jl/issues/59
+		# Workaround:
+		X = model(first).data;
+		Y = model(second).data;
+		D = [evaluate(dist, X[:, i], Y[:, j]) for i in 1:size(X, 2), j in 1:size(Y, 2)]
+		# D = pairwise(dist, model(first).data, model(second).data, dims = 2);
 		return mean(diagonalLoss(D));
 	end
 end
