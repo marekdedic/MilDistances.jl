@@ -1,3 +1,5 @@
+export triplet;
+
 function triplet(model::T; c::Float32 = 1.0f0, innerLoss::SupervisedLoss = L1HingeLoss(), dist::PreMetric = SqEuclidean()) where {T<:MillModel}
 	return function(data::DataSubset)
 		y = getobs(data).metadata;
