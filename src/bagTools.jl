@@ -1,4 +1,5 @@
 using Mill;
+using Random;
 
 function shuffleInBags(node::BagNode)::BagNode
 	bags = ScatteredBags(shuffle.(node.bags.bags));
