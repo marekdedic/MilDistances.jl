@@ -6,7 +6,7 @@ using SpectralClustering;
 
 export magnet_spectral;
 
-function magnet_spectral(model::T, classes::Vector; K::Int = 6, α::Float32 = 0.0f0, clusterIndexUpdateFrequency::Int = 25, dist::PreMetric = SqEuclidean(), innerLoss::SupervisedLoss = L1HingeLoss()) where {T<:MillModel}
+function magnet_spectral(model::T, classes::Vector; K::Int = 2, α::Float32 = 0.0f0, clusterIndexUpdateFrequency::Int = 25, dist::PreMetric = SqEuclidean(), innerLoss::SupervisedLoss = L1HingeLoss()) where {T<:MillModel}
 	counter = 0; # So that it updates on the first run
 	classes = unique(classes);
 	clusterCenters = Vector{Vector{Vector{Float32}}}(undef, length(classes));
