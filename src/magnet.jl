@@ -14,7 +14,11 @@ function magnet(model::T, classes::Vector; K::Int = 2, α::Float32 = 0.0f0, clus
 		for i in 1:length(classes)
 			classData = data.data[:, y .== classes[i]];
 			if size(classData, 2) == 0
-				continue;
+				if isassigned(clusterCenters, i)
+					continue;
+				else
+					clusterCenters[i] = fill(fill(0.0f0, size(data.data, 1)), K);
+				end
 			end
 			classDataPadded = hcat([classData for _ in 1:ceil(Int, K / size(classData, 2)) + 1]...);
 			centerMatrix = kmeans(classDataPadded, K).centers
