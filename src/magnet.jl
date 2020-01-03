@@ -13,7 +13,10 @@ function magnet(model::T, classes::Vector; K::Int = 2, α::Float32 = 0.0f0, clus
 	function updateClusterIndex(data::A, y::B) where {A<:AbstractArray, B<:AbstractVector}
 		for i in 1:length(classes)
 			classData = data.data[:, y .== classes[i]];
-			classDataPadded = hcat([classData for _ in 1:ceil(Int, K / size(classData, 2))]...);
+			if size(classData, 2) == 0
+				continue;
+			end
+			classDataPadded = hcat([classData for _ in 1:ceil(Int, K / size(classData, 2)) + 1]...);
 			centerMatrix = kmeans(classDataPadded, K).centers
 			clusterCenters[i] = map(j -> centerMatrix[:, j], 1:size(centerMatrix, 2));
 		end
