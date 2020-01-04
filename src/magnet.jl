@@ -1,5 +1,6 @@
 using Clustering;
 using Distances;
+using Flux;
 using LinearAlgebra;
 using LossFunctions;
 
@@ -43,16 +44,26 @@ function magnet(model::T, classes::Vector; K::Int = 2, α::Float32 = 0.0f0, clus
 
 		r(i) = outputs[:, i];
 		N = map(i -> evaluate(dist, r(i), μ(r(i))), 1:instanceCount)
-		σ² = reduce(+, N) / (instanceCount - 1)
+		σ² = instanceCount == 1 ? N[1] : sum(N) / (instanceCount - 1);
 		M = [mapreduce(k -> exp(-evaluate(dist, r(i), classCenters[k]) / (2 * σ²)), +, 1:K) for i in 1:instanceCount, classCenters in clusterCenters]
 
 		numerator(i) = exp((-N[i] / (2 * σ²)) - α);
 		denominator(i) = mapreduce(c -> y[i] == c ? 0 : M[i, c], +, 1:length(classes));
 
-		summant(i) = value(innerLoss, log(denominator(i)) - log(numerator(i)));
-		sum = mapreduce(i -> summant(i), +, 1:instanceCount);
+		logNum(i) = iszero(numerator(i)) ? begin @warn "numerator = 0"; param(0.0f0) end : log(numerator(i));
+		logDen(i) = iszero(denominator(i)) ? begin @warn "denominator = 0"; param(0.0f0) end : log(denominator(i));
+
+		summant(i) = value(innerLoss, logDen(i) - logNum(i));
+		sum = sum(i -> summant(i), 1:instanceCount);
 
 		counter -= 1;
-		return sum / instanceCount;
+		ret = sum / instanceCount;
+		if isinf(ret)
+			if iszero(instanceCount)
+				@warn "instanceCount = 0";
+			end
+			return param(0.0f0);
+		end
+		return ret;
 	end
 end
