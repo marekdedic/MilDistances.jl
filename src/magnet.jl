@@ -29,8 +29,12 @@ function magnet(model::T, classes::Vector; K::Int = 2, α::Float32 = 0.0f0, clus
 
 	function μ(r::A)::Vector{Float32} where {A<:AbstractVector}
 		centers = vcat(clusterCenters...);
+		if isempty(centers)
+			@warn "clusterCenters are empty"
+			return fill(0.0f0, length(r));
+		end
 		distances = map(center -> evaluate(dist, r, center), centers)
-		return centers[distances .== minimum(distances)][1];
+		return centers[argmin(distances)];
 	end
 
 	return function(data::DataSubset)
