@@ -7,6 +7,16 @@ function shuffleInBags(node::BagNode)::BagNode
 end
 
 function splitBags(node::BagNode)::Tuple{BagNode, BagNode}
+	function toRanges(vec::Vector{Vector{Int}})::Vector{UnitRange{Int}}
+		ret = Vector{UnitRange{Int}}();
+		counter = 1;
+		for x in vec
+			push!(ret, counter:counter + length(x) - 1);
+			counter += length(x);
+		end
+		return ret;
+	end
+
 	first = Vector{Vector{Int}}();
 	second = Vector{Vector{Int}}();
 	for bag in node.bags
@@ -17,14 +27,10 @@ function splitBags(node::BagNode)::Tuple{BagNode, BagNode}
 		push!(first, bag[1:delim]);
 		push!(second, bag[delim + 1:end]);
 	end
-	function toRanges(vec::Vector{Vector{Int}})::Vector{UnitRange{Int}}
-		ret = Vector{UnitRange{Int}}();
-		counter = 1
-		for x in vec
-			push!(ret, counter:counter + length(x) - 1);
-			counter += length(x);
-		end
-		return ret;
+
+	if isempty(first) || isempty(second)
+		return node, deepcopy(node);
 	end
-	return (BagNode(node.data[vcat(first...)], toRanges(first), node.metadata), BagNode(node.data[vcat(second...)], toRanges(second), node.metadata))
+
+	return BagNode(node.data[vcat(first...)], toRanges(first), node.metadata), BagNode(node.data[vcat(second...)], toRanges(second), node.metadata);
 end
