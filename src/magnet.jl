@@ -68,6 +68,10 @@ function magnet(model::T, classes::Vector; K::Int = 2, α::Float32 = 0.0f0, clus
 			end
 			return param(0.0f0);
 		end
+		if isnan(ret)
+			@warn "loss is NaN";
+			return param(0.0f0);
+		end
 		return ret;
 	end
 end
