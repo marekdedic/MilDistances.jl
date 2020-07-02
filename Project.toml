@@ -1,7 +1,7 @@
 name = "MilDistances"
 uuid = "c1c8aca4-0428-4357-9ed0-07b29dc6f34b"
 authors = ["Marek Dědič <developer@dedic.eu>"]
-version = "0.1.0"
+version = "1.0.0"
 
 [deps]
 Clustering = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
