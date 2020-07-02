@@ -5,7 +5,7 @@ using Statistics;
 
 export CPC;
 
-function CPC(model::T, dist::PreMetric = SqEuclidean()) where {T<:MillModel}
+function CPC(model::T, dist::PreMetric = SqEuclidean()) where {T<:AbstractMillModel}
 	function diagonalLoss(D::T) where T<:AbstractMatrix
 		return log.(diag(D) .+ eps(Float32)) .- fill(log(sum(D) - sum(diag(D)) + eps(Float32)), size(D, 1));
 	end
