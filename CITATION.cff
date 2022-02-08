@@ -1,0 +1,59 @@
+cff-version: 1.2.0
+title: MilDistances.jl
+message: >-
+  Please cite this software using the metadata from
+  'preferred-citation'.
+type: software
+authors:
+  - given-names: Marek
+    family-names: Dědič
+    email: marek@dedic.eu
+    orcid: 'https://orcid.org/0000-0003-1021-8428'
+    affiliation: Czech Technical University in Prague / Cisco Systems, Inc.
+  - given-names: Tomáš
+    family-names: Pevný
+    affiliation: Czech Technical University in Prague
+  - given-names: Lukáš
+    family-names: Bajer
+    affiliation: Cisco Systems, Inc.
+  - given-names: Martin
+    family-names: Holeňa
+    affiliation: Czech Academy of Sciences
+repository-code: 'https://github.com/marekdedic/MilDistances.jl'
+preferred-citation:
+  title: Loss Functions for Clustering in Multi-instance Learning
+  type: conference-paper
+  conference: "20th Conference Information Technologies - Applications and Theory (ITAT 2020)"
+  collection-title: "Proceedings of the 20th Conference Information Technologies - Applications and Theory (ITAT 2020)"
+  collection-type: proceedings
+  authors:
+    - given-names: Marek
+      family-names: Dědič
+      email: marek@dedic.eu
+      orcid: 'https://orcid.org/0000-0003-1021-8428'
+      affiliation: Czech Technical University in Prague / Cisco Systems, Inc.
+    - given-names: Tomáš
+      family-names: Pevný
+      affiliation: Czech Technical University in Prague
+    - given-names: Lukáš
+      family-names: Bajer
+      affiliation: Cisco Systems, Inc.
+    - given-names: Martin
+      family-names: Holeňa
+      affiliation: Czech Academy of Sciences
+  date-published: "2020-10-30"
+  issn: "1613-0073"
+  identifiers:
+    - type: url
+      value: 'http://ceur-ws.org/Vol-2718/'
+  abstract: >-
+    Multi-instance learning belongs to one of recently fast developing areas of
+    machine learning. It is a supervised learning method and this paper reports
+    research into its unsupervised counterpart, multi-instance clustering.
+    Whereas traditional clustering clusters points, multi-instance clustering
+    clusters bags, i.e. multisets of points or of other kinds of objects. The
+    paper focuses on the problem of loss functions for clustering. Three
+    sophisticated loss functions used for clustering of points, contrastive
+    predictive coding, triplet loss and magnet loss, are elaborated for
+    multi-instance clustering. Finally, they are compared on 18 benchmark
+    datasets, as well as on a real-world dataset.
